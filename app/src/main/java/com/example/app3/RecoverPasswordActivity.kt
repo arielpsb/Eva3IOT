@@ -1,81 +1,69 @@
 package com.example.app3
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import com.example.app3.ui.theme.App3Theme
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import androidx.appcompat.app.AlertDialog
+import com.google.firebase.auth.FirebaseAuth
+import java.util.UUID
 
-class RecoverPasswordActivity : ComponentActivity() {
+class RecoverPasswordActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            App3Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    RecoverPasswordScreen(modifier = Modifier.padding(innerPadding))
-                }
+        setContentView(R.layout.activity_recover_password) // Ensure correct layout is used
+
+        auth = FirebaseAuth.getInstance()
+
+        // Find views
+        val btnBack = findViewById<ImageButton>(R.id.btnBack)
+        val btnRecuperar = findViewById<Button>(R.id.btnRecuperar)
+        val etEmailRecuperar = findViewById<EditText>(R.id.etEmailRecuperar)
+
+        // Set click listeners
+        btnBack.setOnClickListener {
+            finish() // Go back to the previous screen
+        }
+
+        btnRecuperar.setOnClickListener {
+            val email = etEmailRecuperar.text.toString().trim()
+            if (email.isNotEmpty()) {
+                verifyUserAndShowPassword(email)
+            } else {
+                showInfoDialog("Campo Vacío", "Por favor, ingrese su correo electrónico.")
             }
         }
     }
-}
 
-@Composable
-fun RecoverPasswordScreen(modifier: Modifier = Modifier) {
-    var email by remember { mutableStateOf("") }
-    var showDialog by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            confirmButton = {
-                TextButton(onClick = { 
-                    showDialog = false 
-                    // Go back to previous activity (MainActivity)
-                    if (context is ComponentActivity) {
-                        context.finish()
+    private fun verifyUserAndShowPassword(email: String) {
+        auth.fetchSignInMethodsForEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val isUserFound = task.result?.signInMethods?.isNotEmpty() == true
+                    if (isUserFound) {
+                        val newPassword = UUID.randomUUID().toString().substring(0, 8)
+                        val message = "El usuario existe en Firebase.\n\nTu nueva contraseña es: $newPassword\n\n(Nota: Esto es una simulación, la contraseña no se ha actualizado en Firebase.)"
+                        showInfoDialog("Contraseña Recuperada (Simulación)", message, shouldFinish = true)
+                    } else {
+                        showInfoDialog("Usuario no encontrado", "No se encontró ningún usuario con el correo electrónico proporcionado.")
                     }
-                }) {
-                    Text("OK")
+                } else {
+                    showInfoDialog("Error de Verificación", "No se pudo verificar el correo electrónico. Inténtelo de nuevo.")
                 }
-            },
-            title = { Text("Recuperación") },
-            text = { Text("Se ha enviado un correo de recuperación a $email") }
-        )
+            }
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Recuperar Clave", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(32.dp))
-        
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Correo Electrónico") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        Button(
-            onClick = { showDialog = true },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Recuperar")
-        }
+    private fun showInfoDialog(title: String, message: String, shouldFinish: Boolean = false) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Aceptar") { _, _ ->
+                if (shouldFinish) finish()
+            }
+            .setCancelable(false)
+            .show()
     }
 }

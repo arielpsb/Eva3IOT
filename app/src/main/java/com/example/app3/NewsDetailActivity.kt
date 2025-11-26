@@ -17,10 +17,9 @@ import com.example.app3.ui.theme.App3Theme
 class NewsDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        val title = intent.getStringExtra("news_title") ?: "No Title"
-        val content = intent.getStringExtra("news_content") ?: "No Content"
-        
+        val title = intent.getStringExtra("news_title") ?: "Detalle de la Noticia"
+        val content = intent.getStringExtra("news_content") ?: "Contenido no disponible."
+
         setContent {
             App3Theme {
                 Surface(
@@ -40,7 +39,7 @@ fun NewsDetailScreen(title: String, content: String, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detalle de Noticia") },
+                title = { Text(title) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
@@ -56,8 +55,6 @@ fun NewsDetailScreen(title: String, content: String, onBack: () -> Unit) {
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Text(text = title, style = MaterialTheme.typography.headlineMedium)
-            Spacer(modifier = Modifier.height(16.dp))
             Text(text = content, style = MaterialTheme.typography.bodyLarge)
         }
     }

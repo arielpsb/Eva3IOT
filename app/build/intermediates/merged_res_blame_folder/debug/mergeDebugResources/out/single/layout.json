@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.example.app3.app-mergeDebugResources-73:/layout/activity_register_account.xml",
+        "source": "com.example.app3.app-main-76:/layout/activity_register_account.xml"
+    },
+    {
+        "merged": "com.example.app3.app-mergeDebugResources-73:/layout/activity_recover_password.xml",
+        "source": "com.example.app3.app-main-76:/layout/activity_recover_password.xml"
+    }
+]

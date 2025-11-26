@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">app3</string>
+
+    <!-- Content Descriptions -->
+    <string name="back_button_desc">Botón para volver a la pantalla anterior</string>
+    <string name="logo_desc">Logo de la aplicación</string>
+
+    <!-- Hints -->
+    <string name="name_hint">Nombre</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Contraseña</string>
+
+    <!-- Button Text -->
+    <string name="register_button">Registrar</string>
 </resources>
