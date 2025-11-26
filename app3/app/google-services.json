@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "364288834900",
+    "project_id": "eva3-fad57",
+    "storage_bucket": "eva3-fad57.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364288834900:android:f56704e3be035996dc5cc1",
+        "android_client_info": {
+          "package_name": "com.example.app3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw5iIA7WhEg2fTTOIsjErPubpgrfsWQI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

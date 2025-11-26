@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.App3" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App3.Splash" parent="Theme.App3">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+</resources>
